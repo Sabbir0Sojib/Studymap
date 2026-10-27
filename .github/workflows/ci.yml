@@ -1,0 +1,31 @@
+# Checks every push and pull request: types, the quick tests and a production build.
+# The browser suites are not run here: they need the public map services and take about 30 minutes
+# (run them with `npm test` or test.bat).
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # install scripts are not needed to build or test (they only compile mapshaper's optional extras)
+      - run: npm ci --ignore-scripts
+      - name: Type check
+        run: npm run check
+      - name: Quick tests
+        run: npm run test:unit
+      - name: Build
+        run: npm run build

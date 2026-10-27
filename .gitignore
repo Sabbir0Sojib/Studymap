@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Production & preview builds
+dist/
+dist-lead/
+dist-lead2/
+
+# Test outputs & screenshots
+tests/out/
+tests/shots/
+.playwright-cli/
+tests/.playwright-cli/
+
+# Secrets: never commit these
+.env
+.env.*
+*.pem
+*.key
+
+# Local agent artifacts & question caches (skills, design notes)
+.impeccable/
+.claude/
+
+# Logs & OS artifacts
+*.log
+.DS_Store
+Thumbs.db
+

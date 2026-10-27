@@ -1,0 +1,286 @@
+@import '@fontsource-variable/geist';
+
+@font-face { font-family: 'Arimo'; src: url('./assets/fonts/Arimo-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: 'Arimo'; src: url('./assets/fonts/Arimo-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: block; }
+@font-face { font-family: 'Arimo'; src: url('./assets/fonts/Arimo-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: block; }
+
+:root {
+  /* Field Notebook: a quiet white cover (top bar and rail) around a desk of graph paper ruled in true millimetres;
+     panels are plain white leaves; graphite is the ink and the main button. */
+  /* the cover: top bar and rail, clean white with hairlines (chosen by the user from five real options);
+     every colour on it comes from these, so the cover can change in one place */
+  --cover: #ffffff;
+  --cover-deep: #e9f1f9;
+  --cover-edge: #e4e6e1;
+  --cover-hover: rgb(43 45 47 / 0.05);
+  --cover-ink: #2b2d2f;
+  --cover-ink-2: #5e6267;
+  --cover-chip: #ffffff;
+  --cover-chip-hover: #f4f5f2;
+  --cover-chip-ink: #2b2d2f;
+  --cover-chip-edge: #cdd1cb;
+  --cover-action: #2b2d2f;
+  --cover-action-hover: #3f4245;
+  --cover-action-ink: #ffffff;
+  --cover-focus: #2f6fb5;
+  --cover-line: rgb(43 45 47 / 0.45);
+  --cover-mark: #2b2d2f;
+  --cover-mark-ink: #ffffff;
+  --cover-mark-dot: #6fa3dc;
+  --cover-active-ink: #1f4e80;
+  --graphite: #2b2d2f;
+  --graphite-hover: #3f4245;
+  /* graph paper: the ruling and its stronger every-10-mm line */
+  --rule: #dfe7ed;
+  --rule-major: #c9d7e2;
+  --desk: #f6f7f3;
+  --panel: #ffffff;
+  --panel-2: #f4f5f2;
+  --line: #e4e6e1;
+  --line-strong: #cdd1cb;
+  --ink: #2b2d2f;
+  --ink-2: #4c5054;
+  --ink-3: #5e6267;
+  /* edges of text boxes and other controls: 3:1 against white, so a field can be seen as a field */
+  --line-input: #8d949e;
+  /* Ruling blue: selection, focus, the current step, handles and guides on the page. Never exported. */
+  --accent: #2f6fb5;
+  --accent-hover: #255a93;
+  --accent-wash: #e9f1f9;
+  --accent-ring: rgb(47 111 181 / 0.35);
+  --accent-ink: #1f4e80;
+  /* Results only */
+  --ok: #1f7a4d;
+  --ok-wash: #e7f4ec;
+  --warn: #8a5300;
+  --warn-wash: #fdf3dc;
+  --err: #b42318;
+  --err-wash: #fdecea;
+  --warn-ink: #6d4200;
+
+  /* one corner scale: panels 12, cards 10, controls 8, chips 6 */
+  --r-panel: 12px;
+  --r-card: 10px;
+  --r-ctl: 8px;
+  --r-chip: 6px;
+  --ui: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', 'Nirmala UI', 'Noto Sans Bengali', 'Hind Siliguri', 'Vrinda', sans-serif;
+  /* shadows in graphite, low and soft: paper resting on paper */
+  --shadow-1: 0 1px 2px rgb(43 45 47 / 0.07), 0 1px 1px rgb(43 45 47 / 0.04);
+  --shadow-2: 0 8px 24px -10px rgb(43 45 47 / 0.16), 0 2px 6px -3px rgb(43 45 47 / 0.07);
+  --shadow-page: 0 1px 2px rgb(43 45 47 / 0.10), 0 10px 30px -12px rgb(43 45 47 / 0.22);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: var(--ui);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--desk);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+#app { height: 100dvh; }
+/* a full-window app: only its panels scroll, never the window itself */
+html, body { overflow: hidden; overflow: clip; overscroll-behavior: none; }
+h1, h2, h3 { text-wrap: balance; }
+p, small, dd { text-wrap: pretty; }
+
+/* the first Tab on the page: straight to the map */
+.skip { position: fixed; left: 12px; top: -60px; z-index: 100; padding: 10px 14px; border-radius: var(--r-ctl); background: var(--ink); color: #fff; font-weight: 600; text-decoration: none; }
+.skip:focus { top: 10px; }
+::selection { background: var(--accent-wash); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h2[tabindex='-1']:focus, h3[tabindex='-1']:focus { outline: none; }
+input, select, textarea, button { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: var(--accent); text-underline-offset: 2px; }
+
+* { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; border: 3px solid transparent; background-clip: content-box; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* controls */
+.field { display: grid; gap: 6px; }
+.field > span, .label { font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
+.input, select.input, textarea.input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line-input);
+  border-radius: var(--r-ctl);
+  padding: 8px 10px;
+  font-size: 14px;
+  min-height: 38px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.input:hover { border-color: var(--ink-3); }
+.input:focus-visible { outline: 2px solid transparent; outline-offset: 2px; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+.input::placeholder { color: var(--ink-3); opacity: 1; }
+/* drop-downs draw their own caret (the Phosphor one used elsewhere), so every select matches */
+select.input {
+  appearance: none; padding-right: 34px; cursor: pointer;
+  background: var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%235e6267' d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E") no-repeat right 11px center / 14px;
+}
+textarea.input { resize: vertical; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 12.5px; line-height: 1.5; }
+.row { display: flex; gap: 8px; align-items: center; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 38px; padding: 7px 14px;
+  border-radius: var(--r-ctl);
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  font-weight: 500;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 80ms ease, box-shadow 120ms ease;
+  white-space: nowrap;
+}
+.btn:hover:not(:disabled) { background: var(--panel-2); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+/* a file picker wrapped in a button-like label shows the keyboard ring on the label */
+.btn:focus-within:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* the main action is written in graphite */
+.btn.primary { background: var(--graphite); border-color: var(--graphite); color: #fff; }
+.btn.primary:disabled { opacity: 1; background: var(--panel-2); border-color: var(--line-strong); color: var(--ink-3); }
+.btn.primary:hover:not(:disabled) { background: var(--graphite-hover); }
+.btn.small { min-height: 30px; padding: 4px 10px; font-size: 12.5px; }
+.btn.ghost { border-color: transparent; background: transparent; }
+.btn.ghost:hover:not(:disabled) { background: rgb(43 45 47 / 0.06); }
+/* a quiet red button for confirming a delete in place (no pop-up dialogs) */
+.btn.danger { border-color: var(--err); color: var(--err); background: var(--err-wash); }
+.btn.danger:hover:not(:disabled) { background: color-mix(in srgb, var(--err) 12%, var(--err-wash)); }
+.btn.block { width: 100%; }
+
+.check { display: flex; gap: 9px; align-items: center; font-size: 14px; cursor: pointer; }
+.check input { width: 16px; height: 16px; accent-color: var(--accent); }
+input[type='range'] { width: 100%; height: 24px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; border-radius: 4px; }
+input[type='range']::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--line-input); }
+input[type='range']::-moz-range-track { height: 4px; border-radius: 2px; background: var(--line-input); }
+input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; box-sizing: border-box; width: 18px; height: 18px; margin-top: -7px; border-radius: 50%; background: var(--panel); border: 2px solid var(--accent); box-shadow: 0 1px 3px rgb(43 45 47 / 0.25); transition: transform 120ms ease; }
+input[type='range']::-moz-range-thumb { box-sizing: border-box; width: 18px; height: 18px; border-radius: 50%; background: var(--panel); border: 2px solid var(--accent); box-shadow: 0 1px 3px rgb(43 45 47 / 0.25); }
+input[type='range']:hover::-webkit-slider-thumb { transform: scale(1.1); }
+input[type='range']:hover::-moz-range-thumb { transform: scale(1.1); }
+input[type='range']:focus-visible::-webkit-slider-thumb { background: var(--accent-wash); }
+input[type='range']:focus-visible::-moz-range-thumb { background: var(--accent-wash); }
+@media (pointer: coarse) {
+  input[type='range'] { height: 44px; }
+  input[type='range']::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -12px; }
+  input[type='range']::-moz-range-thumb { width: 28px; height: 28px; }
+}
+@media (forced-colors: active) {
+  input[type='range']::-webkit-slider-runnable-track, input[type='range']::-moz-range-track { background: ButtonText; }
+  input[type='range']::-webkit-slider-thumb, input[type='range']::-moz-range-thumb { background: Highlight; border-color: ButtonText; }
+}
+/* a slider's label with its value at the right end */
+.field.slider > span { display: flex; justify-content: space-between; gap: 8px; }
+.field.slider .val { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+input[type='color'] { width: 38px; height: 38px; padding: 3px; border: 1px solid var(--line-strong); border-radius: var(--r-ctl); background: #fff; cursor: pointer; }
+
+.seg { display: flex; width: 100%; background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--r-ctl); padding: 3px; gap: 3px; }
+.seg button { flex: 1; border: 0; background: transparent; padding: 6px 8px; font-size: 12.5px; min-height: 30px; border-radius: 6px; color: var(--ink-2); font-weight: 500; transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease; }
+.seg button:hover:not([aria-pressed='true']) { color: var(--ink); background: rgb(255 255 255 / 0.6); }
+.seg button:focus-visible { outline-offset: -2px; }
+.seg { min-width: 0; }
+.seg button:active { transform: scale(0.97); }
+.seg:not(.wrap) button { flex: 1 1 auto; white-space: nowrap; }
+/* equal-width keys, widening only where a name needs it, so a short word is not a thin key beside a long one */
+.seg:not(.wrap) { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+/* more options than fit one line: an even two-column grid (an odd last one takes the full row), never a ragged wrap */
+.seg.wrap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.seg.wrap button { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.seg.wrap button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.seg button[aria-pressed='true'] { background: var(--panel); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgb(43 45 47 / 0.12), 0 0 0 1px var(--line-input); }
+
+.panel-title { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+/* browser surfaces take the notebook too: the caret and the text selection */
+input, textarea { caret-color: var(--accent); }
+.group-title { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+.hint { margin: 0; font-size: 12.5px; color: var(--ink-3); line-height: 1.45; text-wrap: pretty; }
+/* hint-like text of every kind keeps clear of a last line with one lonely word */
+.hint, .about, .msg, .note, .lede, .caption, .detail, .why, .cvdnote, .row-switch small, .acc-body p { text-wrap: pretty; }
+
+/* ---------- one rhythm for every side panel ----------
+   A panel body is .stack: sections 16 px apart, split by a hairline; inside a section things sit 10 px apart.
+   Panels use these instead of their own spacing, so every tab reads the same. */
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.stack > section, .stack > .acc { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-width: 0; }
+.stack > section + section, .stack > section + .acc, .stack > .acc + section { border-top: 1px solid var(--line); padding-top: 16px; }
+.stack > section > .group-title { margin: 0; }
+/* nothing inside a panel may grow wider than the panel (grid tracks otherwise size to their widest child) */
+.side .body :where(section, .stack, .choose, .field, form) { min-width: 0; }
+
+/* ---------- expand and collapse: one quiet style everywhere ----------
+   <details class="acc"><summary>Title</summary><div class="acc-body">...</div></details>
+   A hairline above, the title in the group-title style, + and − at the right. .acc.quiet is the smaller nested one. */
+.acc { border-top: 1px solid var(--line); }
+.acc + .acc { border-top: 1px solid var(--line); }
+.acc > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-height: 40px; padding: 0 2px; list-style: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: var(--ink); border-radius: var(--r-ctl);
+  transition: background-color 120ms ease;
+}
+.acc > summary::-webkit-details-marker { display: none; }
+.acc > summary::after { content: '+'; font-size: 16px; font-weight: 400; color: var(--ink-3); line-height: 1; }
+.acc[open] > summary::after { content: '\2212'; }
+.acc > summary:hover { background: var(--panel-2); }
+.acc > summary:focus-visible { outline-offset: -2px; }
+.acc > summary .cur { margin-left: auto; font-size: 12.5px; font-weight: 500; color: var(--ink-3); }
+.acc > .acc-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 4px 2px 14px; min-width: 0; }
+.acc.quiet > summary { min-height: 34px; font-size: 12.5px; font-weight: 500; color: var(--ink-2); }
+.stack > .acc { gap: 0; }
+/* accordions that follow each other form one ruled list: no section gap between them */
+.stack > .acc + .acc { margin-top: -16px; }
+.stack > .acc:last-child { border-bottom: 1px solid var(--line); }
+
+/* ---------- on/off switch for anything that takes effect at once ----------
+   <label class="row-switch"><span>Frame<small>optional hint</small></span><input type="checkbox" role="switch" ...></label> */
+.row-switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; font-size: 14px; cursor: pointer; }
+.row-switch > span { display: grid; gap: 1px; min-width: 0; }
+.row-switch small { font-size: 12.5px; color: var(--ink-3); line-height: 1.35; }
+input[type='checkbox'][role='switch'] { appearance: none; flex: none; width: 34px; height: 20px; margin: 0; border-radius: 10px; background: var(--line-strong); border: 1px solid var(--line-input); box-sizing: border-box; position: relative; cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease; }
+input[type='checkbox'][role='switch']::after { content: ''; position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(43 45 47 / 0.25); transition: transform 150ms var(--ease); }
+input[type='checkbox'][role='switch']:checked { background: var(--accent); border-color: var(--accent); }
+input[type='checkbox'][role='switch']:checked::after { transform: translateX(14px); }
+input[type='checkbox'][role='switch']:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (forced-colors: active) {
+  input[type='checkbox'][role='switch'] { border: 1px solid ButtonText; background: Canvas; forced-color-adjust: none; }
+  input[type='checkbox'][role='switch']::after { background: ButtonText; box-shadow: none; }
+  input[type='checkbox'][role='switch']:checked { background: Highlight; border-color: ButtonText; }
+  input[type='checkbox'][role='switch']:checked::after { background: HighlightText; }
+}
+@media (pointer: coarse) { .row-switch { min-height: 44px; } }
+.hint.warn { color: var(--warn); }
+.msg { margin: 0; padding: 9px 11px; background: var(--accent-wash); border-radius: var(--r-ctl); font-size: 12.5px; color: var(--accent-ink); text-wrap: pretty; }
+.msg.err { background: var(--err-wash); color: var(--err); }
+.msg.ok { background: var(--ok-wash); color: var(--ok); }
+.msg:empty { padding: 0; margin: 0; height: 0; overflow: hidden; background: none; }
+
+/* phones and tablets: every control is at least 44 px to the finger (the drawing stays the same size) */
+@media (pointer: coarse) {
+  .btn, .btn.small, .seg button, .input { min-height: 44px; }
+  .check { min-height: 44px; }
+  button, select, summary, label { touch-action: manipulation; }
+  /* 16 px in every field keeps iOS from zooming the whole page when one is touched (the title, the scale box and the hex box included) */
+  input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file'], [type='button'], [type='submit'], [type='image']), select, textarea, .hex { font-size: 16px !important; }
+}
+/* Windows high-contrast: switches and pressed buttons keep a visible edge, and so does whatever is chosen
+   (the blue wash and ring are dropped there, so a chosen tile, chip, tab, rail button or list row gets an inner outline in the system highlight colour) */
+@media (forced-colors: active) {
+  .seg button[aria-pressed='true'] { outline: 2px solid ButtonText; }
+  [aria-pressed='true']:not(.eye), [aria-selected='true'], [aria-checked='true'], [aria-current='page'], [aria-current='step'], [aria-current='true'],
+  .tab.active, .tab.on, .chosen, .any.on, .pc.on, .font.on { outline: 2px solid Highlight; outline-offset: -2px; }
+  /* the keyboard ring keeps its own place, so a chosen thing that is also focused still shows where you are */
+  :is([aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current]):focus-visible { outline-color: ButtonText; outline-offset: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* movement goes; colour changes stay short so a click still answers, and the loading spinner keeps turning slowly */
+  *, *::before, *::after { transition-duration: 0ms !important; scroll-behavior: auto !important; }
+}

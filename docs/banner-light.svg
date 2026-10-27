@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="250" viewBox="0 0 720 250" role="img" aria-label="StudyMap: location maps for papers and theses">
+  <g transform="translate(312 8) scale(3)">
+    <rect width="32" height="32" rx="7" fill="#1E4D3F"/>
+    <rect x="7" y="7" width="18" height="18" fill="none" stroke="#EEF3F1" stroke-width="1.6"/>
+    <path d="M11 20c2-6 6-9 10-8" fill="none" stroke="#4FB3D9" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="7" cy="7" r="1.6" fill="#EEF3F1"/>
+    <circle cx="25" cy="25" r="1.6" fill="#EEF3F1"/>
+  </g>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle">
+    <text x="360" y="184" font-size="54" font-weight="700" letter-spacing="-1" fill="#16211D">StudyMap</text>
+    <text x="360" y="228" font-size="21" fill="#55605B">Location maps for papers and theses, made in the browser</text>
+  </g>
+</svg>

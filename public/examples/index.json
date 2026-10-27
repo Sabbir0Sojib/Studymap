@@ -1,0 +1,20 @@
+[
+  {
+    "id": "dhaka",
+    "title": "Dhaka District with its sub-districts",
+    "note": "A classic location map: the district, its upazilas named, and a country locator.",
+    "file": "dhaka-district.studymap.json"
+  },
+  {
+    "id": "savar",
+    "title": "Savar Upazila, drill-down (a)(b)(c)",
+    "note": "Country, then division, then the study area, joined by zoom lines.",
+    "file": "savar-drill-down.studymap.json"
+  },
+  {
+    "id": "sylhet",
+    "title": "Sylhet District with sampling sites",
+    "note": "Eight sites from a CSV table, named on the map (made-up example data).",
+    "file": "sylhet-sampling-sites.studymap.json"
+  }
+]
