@@ -12,6 +12,8 @@
   </picture>
 </p>
 
+<h3 align="center"><a href="https://studymap.pages.dev">Open StudyMap → studymap.pages.dev</a></h3>
+
 ![The StudyMap editor with a map of Dhaka District](linkedin/normal/app-design.png)
 
 StudyMap makes the location map for a paper or thesis. Type a place name, pick your journal, and you get a finished
